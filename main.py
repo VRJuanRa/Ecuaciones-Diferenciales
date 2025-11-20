@@ -18,72 +18,93 @@ def lanzar_archivo(nombre_archivo):
 #        VENTANA PRINCIPAL
 # -------------------------------
 ventana = tk.Tk()
-ventana.title("Herramientas Matemáticas")
-ventana.geometry("600x400")
-ventana.configure(bg="#1e1e2f")   # Fondo oscuro elegante
-
+ventana.title("Herramientas Matemáticas - Equipo 4")
+ventana.attributes("-fullscreen", True)
+ventana.configure(bg="#F2F2F2")
 
 # -------------------------------
-#          TÍTULO
+#          TÍTULO PRINCIPAL
 # -------------------------------
 titulo = tk.Label(
     ventana,
-    text="Herramientas Matemáticas",
-    font=("Segoe UI", 20, "bold"),
-    fg="white",
-    bg="#1e1e2f"
+    text="Herramientas Matemáticas — Métodos Numéricos",
+    font=("Segoe UI", 28, "bold"),
+    bg="#F2F2F2",
+    fg="#333333"
 )
-titulo.pack(pady=20)
-
+titulo.pack(pady=30)
 
 # -------------------------------
-#   FRAME PRINCIPAL DE BOTONES
+#         CONTENEDOR CENTRAL
 # -------------------------------
-frame = tk.Frame(ventana, bg="#1e1e2f")
-frame.pack(pady=10)
+frame = tk.Frame(ventana, bg="#F2F2F2")
+frame.pack()
 
-
-# Estilo de botones
+# -------------------------------
+#         ESTILO DE BOTONES
+# -------------------------------
 style = ttk.Style()
 style.configure(
     "TButton",
-    font=("Segoe UI", 14, "bold", ),
+    font=("Segoe UI", 14, "bold"),
     padding=10
 )
 
 # -------------------------------
-#      BOTONES DEL MENÚ
+#      BOTONES DE PROGRAMAS
 # -------------------------------
-btn1 = ttk.Button(
-    frame,
-    text="Regla del Trapecio",
-    command=lambda: lanzar_archivo("ReglaDeTrapecio.py")
-)
-btn1.grid(row=0, column=0, padx=20, pady=20)
+botones = [
+    ("Regla del Trapecio", "ReglaDeTrapecio.py"),
+    ("Newton-Raphson", "Newton_Raphson.py"),
+    ("Euler", "Euler.py"),
+    ("Euler Mejorado", "Euler_Mejorado.py"),
+    ("Runge-Kutta 4", "Runge-Kutta-4.py"),
+    ("Coeficiente Constante", "Coef_Constante.py"),
+]
 
+fila = 0
+col = 0
 
-btn2 = ttk.Button(
-    frame,
-    text="Newton-Raphson",
-    command=lambda: lanzar_archivo("Newton_Raphson.py")
-)
-btn2.grid(row=0, column=1, padx=20, pady=20)
+for texto, archivo in botones:
+    btn = ttk.Button(
+        frame,
+        text=texto,
+        width=25,
+        command=lambda a=archivo: lanzar_archivo(a)
+    )
+    btn.grid(row=fila, column=col, padx=40, pady=25)
 
+    col += 1
+    if col == 2:  # 2 columnas
+        col = 0
+        fila += 1
 
 # -------------------------------
-# PIE DE PÁGINA
+#          BOTÓN SALIR
+# -------------------------------
+def salir():
+    ventana.destroy()
+
+btn_salir = ttk.Button(
+    ventana,
+    text="Salir",
+    command=salir
+)
+btn_salir.pack(pady=20)
+
+# -------------------------------
+#           FOOTER
 # -------------------------------
 footer = tk.Label(
     ventana,
-    text="Proyecto Ecuaciones Diferenciales - Equipo 4",
-    font=("Segoe UI", 10),
-    fg="lightgray",
-    bg="#1e1e2f"
+    text="Proyecto Ecuaciones Diferenciales — Equipo 4",
+    font=("Segoe UI", 12),
+    fg="#666666",
+    bg="#F2F2F2"
 )
-footer.pack(side="bottom", pady=15)
-
+footer.pack(side="bottom", pady=20)
 
 # -------------------------------
-#     EJECUTAR INTERFAZ
+#      EJECUTAR APLICACIÓN
 # -------------------------------
 ventana.mainloop()
