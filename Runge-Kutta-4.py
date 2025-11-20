@@ -5,9 +5,9 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# ----------------------------
-# MÉTODO RUNGE-KUTTA 4
-# ----------------------------
+#----------------------------------------------------------------------      
+#                               METODO RK4
+# ----------------------------------------------------------------------
 def runge_kutta_4():
     tabla.delete(*tabla.get_children())
     fig.clear()
@@ -16,7 +16,10 @@ def runge_kutta_4():
     y = sp.Symbol('y')
 
     try:
-        # Obtener datos
+        # ----------------------------------------------------------------------
+        #              LO QUE DICE EL USUARIO
+        # ----------------------------------------------------------------------
+        
         f_str = entry_funcion.get()
         f_xy = sp.sympify(f_str)
 
@@ -32,7 +35,11 @@ def runge_kutta_4():
 
         xk = x0
         yk = y0
-
+        
+        # ----------------------------------------------------------------------
+        #                           PROCESO  RK4
+        # ----------------------------------------------------------------------
+        
         for k in range(iterations):
             k1 = h * f(xk, yk)
             k2 = h * f(xk + h/2, yk + k1/2)
@@ -59,7 +66,10 @@ def runge_kutta_4():
             xk = x_next
             yk = y_next
 
-        # Graficar
+        # ----------------------------------------------------------------------
+        #                GRAFICA DE LA SOLUCION
+        # ----------------------------------------------------------------------
+        
         ax = fig.add_subplot(111)
         ax.plot(xs, ys, marker="o")
         ax.set_title("Solución con Runge-Kutta 4")
@@ -74,7 +84,7 @@ def runge_kutta_4():
 
 
 # ----------------------------
-# INTERFAZ TKINTER
+#       INTERFAZ 
 # ----------------------------
 ventana = tk.Tk()
 ventana.title("Runge-Kutta de Orden 4")
@@ -85,7 +95,7 @@ tk.Label(ventana, text="Método Runge-Kutta 4° — Equipo 4",
          font=("Segoe UI", 16, "bold"), bg="#F2F2F2").pack(pady=10)
 
 # ----------------------------
-# ENTRADAS
+#           ENTRADAS
 # ----------------------------
 frame_entrada = tk.Frame(ventana, bg="#F2F2F2")
 frame_entrada.pack(pady=10)
@@ -113,12 +123,12 @@ entry_iter.grid(row=0, column=9, padx=5)
 ttk.Button(frame_entrada, text="Calcular", command=runge_kutta_4).grid(row=0, column=10, padx=10)
 
 # ----------------------------
-# TABLA + GRÁFICA
+#       TABLA 
 # ----------------------------
 frame_inferior = tk.Frame(ventana, bg="#F2F2F2")
 frame_inferior.pack(expand=True, fill="both", padx=10, pady=10)
 
-# Tabla
+# TABLA
 frame_tabla = tk.LabelFrame(frame_inferior, text="Resultados",
                             font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_tabla.pack(side="left", fill="y", padx=10)
@@ -134,7 +144,7 @@ style = ttk.Style()
 style.configure("Treeview", font=("Segoe UI", 9))
 style.configure("Treeview.Heading", font=("Segoe UI", 10, "bold"))
 
-# Gráfica
+# GRAFICA
 frame_grafica = tk.LabelFrame(frame_inferior, text="Gráfica",
                               font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_grafica.pack(side="right", fill="both", expand=True, padx=10)

@@ -5,13 +5,21 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
 def euler_mejorado():
     tabla.delete(*tabla.get_children())
-    fig.clear()
-
+    fig.clear()#lIMPIA AMBOS DOS 
+    
+    #----------------------------------------------------------------------
+    #                       DEFINICION DE SIMBOLOS
+    #----------------------------------------------------------------------
     x = sp.Symbol('x')
     y = sp.Symbol('y')
-
+    
+    
+    #----------------------------------------------------------------------
+    #              VALORES INGRESADOS POR USUARIO O NOSTROS
+    #----------------------------------------------------------------------
     try:
         f_str = entry_funcion.get()
         f_xy = sp.sympify(f_str)
@@ -23,37 +31,48 @@ def euler_mejorado():
 
         f = sp.lambdify((x, y), f_xy, "numpy")
 
-        xs = [x0]
+        xs = [x0]# LISTAS PARA GRAFICAR
         ys = [y0]
 
         xk = x0
         yk = y0
 
+        #----------------------------------------------------------------------
+        #                   EULER MEJORADO
+        #----------------------------------------------------------------------
         for k in range(iterations):
             # Predictor (Euler simple)
             y_pred = yk + h * f(xk, yk)
             x_next = xk + h
 
-            # Corrector (promedio de pendientes)
-            k1 = f(xk, yk)
-            k2 = f(x_next, y_pred)
-            y_next = yk + (h/2) * (k1 + k2)
+           
+            k1 = f(xk, yk)       
+            k2 = f(x_next, y_pred) 
+            y_next = yk + (h/2) * (k1 + k2) 
 
+            #----------------------------------------------------------------------
+            #                       LLENADOR DE LA TABLA
+            #----------------------------------------------------------------------
+            
             tabla.insert("", "end", values=[
                 k,
-                f"{xk:.5f}",
+                f"{xk:.5f}", 
                 f"{yk:.5f}",
                 f"{y_pred:.5f}",
                 f"{y_next:.5f}"
             ])
-
+    #----------------------------------------------------------------------
+    #                   ACTUALIZACION DE LISTAS PARA GRAFICAR
+    #----------------------------------------------------------------------
             xs.append(x_next)
             ys.append(y_next)
 
             xk = x_next
             yk = y_next
-
-        # Graficar
+        #----------------------------------------------------------------------
+        #                   GRAFICA DE LA SOLUCION
+        #----------------------------------------------------------------------
+        
         ax = fig.add_subplot(111)
         ax.plot(xs, ys, marker='o')
         ax.set_title("Solución con Método de Euler Mejorado")
@@ -66,8 +85,9 @@ def euler_mejorado():
     except Exception as e:
         print("Error:", e)
 
-
-# Ventana principal
+#----------------------------------------------------------------------
+#                       VENATANA PRINCIPAL
+#----------------------------------------------------------------------
 ventana = tk.Tk()
 ventana.title("Método de Euler Mejorado")
 ventana.attributes('-fullscreen', True)

@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 # -------------------------------
-#   FUNCIÓN PARA EJECUTAR ARCHIVOS
+#   EJECUTAR EL ARCHIVOS
 # -------------------------------
 def lanzar_archivo(nombre_archivo):
     try:
@@ -15,16 +15,14 @@ def lanzar_archivo(nombre_archivo):
 
 
 # -------------------------------
-#        VENTANA PRINCIPAL
+#        DISEÑO VENTANA 
 # -------------------------------
 ventana = tk.Tk()
 ventana.title("Herramientas Matemáticas - Equipo 4")
 ventana.attributes("-fullscreen", True)
 ventana.configure(bg="#F2F2F2")
 
-# -------------------------------
-#          TÍTULO PRINCIPAL
-# -------------------------------
+
 titulo = tk.Label(
     ventana,
     text="Herramientas Matemáticas — Métodos Numéricos",
@@ -34,15 +32,11 @@ titulo = tk.Label(
 )
 titulo.pack(pady=30)
 
-# -------------------------------
-#         CONTENEDOR CENTRAL
-# -------------------------------
+
 frame = tk.Frame(ventana, bg="#F2F2F2")
 frame.pack()
 
-# -------------------------------
-#         ESTILO DE BOTONES
-# -------------------------------
+
 style = ttk.Style()
 style.configure(
     "TButton",
@@ -50,9 +44,7 @@ style.configure(
     padding=10
 )
 
-# -------------------------------
-#      BOTONES DE PROGRAMAS
-# -------------------------------
+
 botones = [
     ("Regla del Trapecio", "ReglaDeTrapecio.py"),
     ("Newton-Raphson", "Newton_Raphson.py"),
@@ -79,9 +71,7 @@ for texto, archivo in botones:
         col = 0
         fila += 1
 
-# -------------------------------
-#          BOTÓN SALIR
-# -------------------------------
+
 def salir():
     ventana.destroy()
 
@@ -92,9 +82,7 @@ btn_salir = ttk.Button(
 )
 btn_salir.pack(pady=20)
 
-# -------------------------------
-#           FOOTER
-# -------------------------------
+
 footer = tk.Label(
     ventana,
     text="Proyecto Ecuaciones Diferenciales — Equipo 4",
@@ -104,7 +92,4 @@ footer = tk.Label(
 )
 footer.pack(side="bottom", pady=20)
 
-# -------------------------------
-#      EJECUTAR APLICACIÓN
-# -------------------------------
 ventana.mainloop()

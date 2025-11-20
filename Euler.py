@@ -7,16 +7,20 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def euler_method():
     tabla.delete(*tabla.get_children())
-    fig.clear()
+    fig.clear()#LIPIA AMBOS DOS 
 
+    #----------------------------------------------------------------------
+    #                      SIMBOLOS DE QUE x ES x Y y ES y
+    #----------------------------------------------------------------------
     x = sp.Symbol('x')
     y = sp.Symbol('y')
 
     try:
-        # Lectura de datos
+        #----------------------------------------------------------------------
+        #                          LO QUE PUSO EL USUARIO
+        #----------------------------------------------------------------------
         f_str = entry_funcion.get()
         f_xy = sp.sympify(f_str)
-
         x0 = float(entry_x0.get())
         y0 = float(entry_y0.get())
         h = float(entry_h.get())
@@ -29,7 +33,9 @@ def euler_method():
 
         xk = x0
         yk = y0
-
+        #----------------------------------------------------------------------
+        #                       LO QUE HACE EL METODO DE EULER
+        #----------------------------------------------------------------------
         for k in range(iterations):
             y_next = yk + h * f(xk, yk)
             x_next = xk + h
@@ -46,8 +52,9 @@ def euler_method():
 
             xk = x_next
             yk = y_next
-
-        # Graficar
+        #----------------------------------------------------------------------
+        #                   LA GRÁFICA
+        #----------------------------------------------------------------------
         ax = fig.add_subplot(111)
         ax.plot(xs, ys, marker='o')
         ax.set_title("Solución con Método de Euler")
@@ -55,13 +62,14 @@ def euler_method():
         ax.set_ylabel("y")
         ax.grid(True)
 
-        canvas.draw()
+        canvas.draw()#ACTUALIZA LA GRÁFICA
 
     except Exception as e:
         print("Error:", e)
 
-
-# Ventana principal
+#----------------------------------------------------------------------
+#                       INTERFAZ
+#----------------------------------------------------------------------
 ventana = tk.Tk()
 ventana.title("Método de Euler")
 ventana.attributes('-fullscreen', True)
