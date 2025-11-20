@@ -43,7 +43,7 @@ def calcular():
         for i in range(n):
             xs = [x_vals[i], x_vals[i], x_vals[i+1], x_vals[i+1]]
             ys = [0, y_vals[i], y_vals[i+1], 0]
-            plt.fill(xs, ys, 'orange', alpha=0.3, edgecolor='red')
+            plt.fill(xs, ys, 'blue', alpha=0.3, edgecolor='red')
 
         plt.scatter(x_vals, y_vals, color='red', zorder=5)
         plt.legend()
