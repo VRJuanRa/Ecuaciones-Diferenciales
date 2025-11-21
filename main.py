@@ -18,14 +18,14 @@ def lanzar_archivo(nombre_archivo):
 #        DISEÑO VENTANA 
 # -------------------------------
 ventana = tk.Tk()
-ventana.title("Herramientas Matemáticas - Equipo 4")
+ventana.title("Equipo 4")
 ventana.attributes("-fullscreen", True)
 ventana.configure(bg="#F2F2F2")
 
 
 titulo = tk.Label(
     ventana,
-    text="Herramientas Matemáticas — Métodos Numéricos",
+    text=" Métodos",
     font=("Segoe UI", 28, "bold"),
     bg="#F2F2F2",
     fg="#333333"
