@@ -7,39 +7,49 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def euler_method():
     tabla.delete(*tabla.get_children())
-    fig.clear()#LIPIA AMBOS DOS 
+    fig.clear()
 
-    #----------------------------------------------------------------------
-    #                      SIMBOLOS DE QUE x ES x Y y ES y
-    #----------------------------------------------------------------------
     x = sp.Symbol('x')
     y = sp.Symbol('y')
 
     try:
-        #----------------------------------------------------------------------
-        #                          LO QUE PUSO EL USUARIO
-        #----------------------------------------------------------------------
         f_str = entry_funcion.get()
         f_xy = sp.sympify(f_str)
         x0 = float(entry_x0.get())
         y0 = float(entry_y0.get())
+        xf = float(entry_xf.get())  # x final
         h = float(entry_h.get())
-        iterations = int(entry_iter.get())
+
+        if h == 0:
+            raise ValueError("El paso 'h' no puede ser cero.")
+
+        # Verificar dirección del paso
+        if (xf > x0 and h < 0) or (xf < x0 and h > 0):
+            raise ValueError("La dirección del paso 'h' no coincide con el intervalo [x0, xf].")
 
         f = sp.lambdify((x, y), f_xy, "numpy")
 
         xs = [x0]
         ys = [y0]
-
         xk = x0
         yk = y0
-        #----------------------------------------------------------------------
-        #                       LO QUE HACE EL METODO DE EULER
-        #----------------------------------------------------------------------
-        for k in range(iterations):
+        k = 0
+
+        # Bucle adaptativo: avanzar hasta alcanzar xf (con tolerancia)
+        while (h > 0 and xk < xf) or (h < 0 and xk > xf):
+            # Calcular siguiente valor
             y_next = yk + h * f(xk, yk)
             x_next = xk + h
 
+            # Si el siguiente paso sobrepasa xf, ajustar h para terminar exactamente en xf
+            if (h > 0 and x_next > xf) or (h < 0 and x_next < xf):
+                h_last = xf - xk
+                if abs(h_last) < 1e-10:  # ya casi en xf
+                    break
+                y_next = yk + h_last * f(xk, yk)
+                x_next = xf
+
+            # Insertar en la tabla
             tabla.insert("", "end", values=[
                 k,
                 f"{xk:.5f}",
@@ -52,26 +62,31 @@ def euler_method():
 
             xk = x_next
             yk = y_next
-        #----------------------------------------------------------------------
-        #                   LA GRÁFICA
-        #----------------------------------------------------------------------
+            k += 1
+
+            # Protección contra bucles infinitos
+            if k > 100000:
+                raise RuntimeError("Demasiadas iteraciones. Verifica los valores de h y el intervalo.")
+
+        # Gráfica
         ax = fig.add_subplot(111)
-        ax.plot(xs, ys, marker='o')
+        ax.plot(xs, ys, marker='o', linestyle='-')
         ax.set_title("Solución con Método de Euler")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.grid(True)
-
-        canvas.draw()#ACTUALIZA LA GRÁFICA
+        canvas.draw()
 
     except Exception as e:
         print("Error:", e)
+        # Opcional: mostrar mensaje en GUI
+        tabla.insert("", "end", values=["Error", "", "", str(e)])
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 #                       INTERFAZ
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 ventana = tk.Tk()
-ventana.title("Método de Euler")
+ventana.title("Método de Euler — Intervalo [x0, xf]")
 ventana.attributes('-fullscreen', True)
 ventana.configure(bg="#F2F2F2")
 
@@ -90,17 +105,17 @@ tk.Label(frame_entrada, text="x0:", bg="#F2F2F2").grid(row=0, column=2)
 entry_x0 = ttk.Entry(frame_entrada, width=10)
 entry_x0.grid(row=0, column=3, padx=5)
 
-tk.Label(frame_entrada, text="y0:", bg="#F2F2F2").grid(row=0, column=4)
+tk.Label(frame_entrada, text="xf:", bg="#F2F2F2").grid(row=0, column=4)  # x final
+entry_xf = ttk.Entry(frame_entrada, width=10)
+entry_xf.grid(row=0, column=5, padx=5)
+
+tk.Label(frame_entrada, text="y0:", bg="#F2F2F2").grid(row=0, column=6)
 entry_y0 = ttk.Entry(frame_entrada, width=10)
-entry_y0.grid(row=0, column=5, padx=5)
+entry_y0.grid(row=0, column=7, padx=5)
 
-tk.Label(frame_entrada, text="h:", bg="#F2F2F2").grid(row=0, column=6)
+tk.Label(frame_entrada, text="h:", bg="#F2F2F2").grid(row=0, column=8)
 entry_h = ttk.Entry(frame_entrada, width=10)
-entry_h.grid(row=0, column=7, padx=5)
-
-tk.Label(frame_entrada, text="Iteraciones:", bg="#F2F2F2").grid(row=0, column=8)
-entry_iter = ttk.Entry(frame_entrada, width=10)
-entry_iter.grid(row=0, column=9, padx=5)
+entry_h.grid(row=0, column=9, padx=5)
 
 ttk.Button(frame_entrada, text="Calcular", command=euler_method).grid(row=0, column=10, padx=10)
 
