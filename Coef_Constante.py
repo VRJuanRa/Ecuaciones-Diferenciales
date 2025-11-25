@@ -68,7 +68,7 @@ def resolver():
         #          MOSTRAR SOLUCIÓN GENERAL Y EVALUAR X0, Y0
         #----------------------------------------------------------------------
 
-        sol = " + ".join([f"C{i+1}*e^({r}x)" for i, r in enumerate(roots)])
+        sol = " + ".join([f"K{i+1}*e^({r}x)" for i, r in enumerate(roots)])
 
         label_sol.config(text=f"Solución general: {sol}")
         label_xy.config(text=f"X₀ = {x0_usuario}     Y₀ = {y0_usuario}")

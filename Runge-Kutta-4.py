@@ -9,8 +9,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #                               METODO RK4
 # ----------------------------------------------------------------------
 def runge_kutta_4():
-    tabla.delete(*tabla.get_children())
-    fig.clear()
+    tabla.delete(*tabla.get_children())#LIMPIA LA TABLA 
+    fig.clear() #LIMPIA LA GRAFICA 
 
     x = sp.Symbol('x')
     y = sp.Symbol('y')
