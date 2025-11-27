@@ -5,7 +5,7 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-#----------------------------------------------------------------------      
+      
 #                           METODO RK4 
 # ----------------------------------------------------------------------
 def runge_kutta_4():

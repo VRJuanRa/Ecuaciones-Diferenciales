@@ -70,35 +70,6 @@ def euler_method():
             yk = y_next
             k += 1
 
-        # ----------------------------------------------------
-        #               SOLUCIÓN ANALÍTICA       
-        # ----------------------------------------------------
-        try:
-            t = sp.Symbol("t")
-            Y = sp.Function("y")(t)
-
-            f_t = f_xy.subs({x: t, y: Y})
-            
-            eq = sp.Eq(sp.diff(Y, t), f_t)
-            
-            sol_gen = sp.dsolve(eq)
-
-            C1 = list(sol_gen.free_symbols)[0]
-            
-            ecuacion_C1 = sol_gen.subs(t, x0)
-            
-            valor_C1 = sp.solve(ecuacion_C1 - y0, C1)[0]
-            
-            sol_part = sol_gen.subs(C1, valor_C1)
-
-            # Insertar la solución en la tabla
-            tabla.insert("", "end",
-                         values=["---", "Solución:", "", str(sol_part)])
-
-        except Exception as e:
-            tabla.insert("", "end",
-                         values=["---", "No se pudo obtener solución analítica", "", str(e)])
-
         # #----------------------------------------------------------------------
         #       GRAFICAR RESULTADOS
         # #----------------------------------------------------------------------

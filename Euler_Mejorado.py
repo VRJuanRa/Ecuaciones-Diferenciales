@@ -63,25 +63,6 @@ def euler_method():
             k += 1
 
         # ----------------------------------------------------
-        #           ANALÍTICA
-        # ----------------------------------------------------
-        try:
-            # DECLARAMOS y COMO FUNCION DE x
-            y_func = sp.Function('y')
-
-            # FORMAMOS LA EDO
-            eq = sp.Eq(sp.diff(y_func(x), x), f_xy)
-
-            #  RESOLVEMOS 
-            sol_analitica = sp.dsolve(eq)
-
-            # IMPRIMIDOR XD
-            sol_texto = f"Solución: {sol_analitica}"
-
-        except Exception:
-            sol_texto = "Solución: No se pudo obtener solución analítica"
-
-        # ----------------------------------------------------
         #       GRAFICAR RESULTADOS
         # ----------------------------------------------------
         ax = fig.add_subplot(111)
