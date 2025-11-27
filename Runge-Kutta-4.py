@@ -5,7 +5,7 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-      
+#----------------------------------------------------------------------    
 #                           METODO RK4 
 # ----------------------------------------------------------------------
 def runge_kutta_4():
@@ -13,20 +13,20 @@ def runge_kutta_4():
     tabla.delete(*tabla.get_children())  # LIMPIA TABLA 
     fig.clear()  # LIMPIA GRAFICA
 
+    t = sp.Symbol('t')
     x = sp.Symbol('x')
-    y = sp.Symbol('y')
 
     try:
         #----------------------------------------------------------------------
         #               LO QUE EL USUARIO ESCRIBE
         #----------------------------------------------------------------------
         f_str = entry_funcion.get()
-        f_xy = sp.sympify(f_str)
+        f_tx = sp.sympify(f_str)
 
-        x0 = float(entry_x0.get())
-        y0 = float(entry_y0.get())
+        t0 = float(entry_t0.get())      
+        x0 = float(entry_x0.get())      
         h = float(entry_h.get())
-        xf = y0   #LO QUE PIDIO EL PROFE 
+        tf = x0   #LO QUE PIDIO EL PROFE 
 
         if h == 0:
             raise ValueError("El paso h no puede ser cero.")
@@ -34,27 +34,27 @@ def runge_kutta_4():
         # ----------------------------------------------------
         # CONVERTIR A FUNCIÓN PARA QUE LA ENTIENDA EL PYTHON
         # ----------------------------------------------------
-        f = sp.lambdify((x, y), f_xy, "numpy")
+        f = sp.lambdify((t, x), f_tx, "numpy")
 
+        ts = [t0]
         xs = [x0]
-        ys = [y0]
 
+        tk_ = t0
         xk = x0
-        yk = y0
         k = 0
         
         # ----------------------------------------------------
         # RK4 
         # ----------------------------------------------------
-        while (h > 0 and xk < xf) or (h < 0 and xk > xf):
+        while (h > 0 and tk_ < tf) or (h < 0 and tk_ > tf):
 
-            k1 = h * f(xk, yk)
-            k2 = h * f(xk + h/2, yk + k1/2)
-            k3 = h * f(xk + h/2, yk + k2/2)
-            k4 = h * f(xk + h, yk + k3)
+            k1 = h * f(tk_, xk)
+            k2 = h * f(tk_ + h/2, xk + k1/2)
+            k3 = h * f(tk_ + h/2, xk + k2/2)
+            k4 = h * f(tk_ + h, xk + k3)
 
-            y_next = yk + (k1 + 2*k2 + 2*k3 + k4) / 6
-            x_next = xk + h
+            x_next = xk + (k1 + 2*k2 + 2*k3 + k4) / 6
+            t_next = tk_ + h
             
             # ----------------------------------------------------
             # HACENDOR DE TABLA
@@ -62,30 +62,31 @@ def runge_kutta_4():
             
             tabla.insert("", "end", values=[
                 k,
+                f"{tk_:.5f}",
                 f"{xk:.5f}",
-                f"{yk:.5f}",
                 f"{k1:.5f}",
                 f"{k2:.5f}",
                 f"{k3:.5f}",
                 f"{k4:.5f}",
-                f"{y_next:.5f}"
+                f"{x_next:.5f}"
             ])
 
+            ts.append(t_next)
             xs.append(x_next)
-            ys.append(y_next)
 
+            tk_ = t_next
             xk = x_next
-            yk = y_next
             k += 1
+
         # ----------------------------------------------------
         #                     GRAFICA
         # ----------------------------------------------------
         ax = fig.add_subplot(111)
-        ax.plot(xs, ys, marker="o", linestyle="-", label="RK4")
+        ax.plot(ts, xs, marker="o", linestyle="-", label="RK4")
 
         ax.set_title("Runge–Kutta 4° Orden", fontsize=12)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
+        ax.set_xlabel("t")
+        ax.set_ylabel("x")
         ax.grid(True)
 
         canvas.draw()
@@ -109,17 +110,17 @@ tk.Label(ventana, text="Método Runge-Kutta 4° — Equipo 4",
 frame_entrada = tk.Frame(ventana, bg="#F2F2F2")
 frame_entrada.pack(pady=10)
 
-tk.Label(frame_entrada, text="f(x, y) =", bg="#F2F2F2").grid(row=0, column=0)
+tk.Label(frame_entrada, text="f(t, x) =", bg="#F2F2F2").grid(row=0, column=0)
 entry_funcion = ttk.Entry(frame_entrada, width=25)
 entry_funcion.grid(row=0, column=1, padx=5)
 
-tk.Label(frame_entrada, text="x0:", bg="#F2F2F2").grid(row=0, column=2)
-entry_x0 = ttk.Entry(frame_entrada, width=10)
-entry_x0.grid(row=0, column=3, padx=5)
+tk.Label(frame_entrada, text="t0:", bg="#F2F2F2").grid(row=0, column=2)
+entry_t0 = ttk.Entry(frame_entrada, width=10)
+entry_t0.grid(row=0, column=3, padx=5)
 
-tk.Label(frame_entrada, text="y0:", bg="#F2F2F2").grid(row=0, column=4)
-entry_y0 = ttk.Entry(frame_entrada, width=10)
-entry_y0.grid(row=0, column=5, padx=5)
+tk.Label(frame_entrada, text="x0:", bg="#F2F2F2").grid(row=0, column=4)
+entry_x0 = ttk.Entry(frame_entrada, width=10)
+entry_x0.grid(row=0, column=5, padx=5)
 
 tk.Label(frame_entrada, text="h:", bg="#F2F2F2").grid(row=0, column=6)
 entry_h = ttk.Entry(frame_entrada, width=10)
@@ -135,7 +136,7 @@ frame_tabla = tk.LabelFrame(frame_inferior, text="Resultados",
                             font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_tabla.pack(side="left", fill="y", padx=10)
 
-cols = ["Iter", "x_k", "y_k", "k1", "k2", "k3", "k4", "y_(k+1)"]
+cols = ["Iter", "t_k", "x_k", "k1", "k2", "k3", "k4", "x_(k+1)"]
 tabla = ttk.Treeview(frame_tabla, columns=cols, show="headings", height=25)
 
 for col in cols:

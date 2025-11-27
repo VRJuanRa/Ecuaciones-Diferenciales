@@ -12,72 +12,71 @@ def euler_method():
     fig.clear()
 
     # DEFINIENDO LOS SÍMBOLOS
+    t = sp.Symbol('t')
     x = sp.Symbol('x')
-    y = sp.Symbol('y')
 
     try:
         # ENTRADAS DEL USUARIO
         f_str = entry_funcion.get()
-        f_xy = sp.sympify(f_str)
+        f_tx = sp.sympify(f_str)
 
-        x0 = float(entry_x0.get())
-        y0 = float(entry_y0.get())
+        t0 = float(entry_x0.get())   
+        x0 = float(entry_y0.get())   
         h = float(entry_h.get())
-        xf = y0  #EL LIMITE 
+        tf = x0  # EL LIMITE LIMITADOR
 
         if h == 0:
             raise ValueError("El paso 'h' no puede ser cero.")
 
         # TRADUCTOR DE PYTHON EN POCAS PALABRAS
-        f = sp.lambdify((x, y), f_xy, "numpy")
+        f = sp.lambdify((t, x), f_tx, "numpy")
 
         # LISTAS PARA GRAFICAR
+        ts = [t0]
         xs = [x0]
-        ys = [y0]
 
+        tk_ = t0
         xk = x0
-        yk = y0
         k = 0
 
         # #----------------------------------------------------------------------
         #       MÉTODO DE EULER HASTA QUE LLEGUE A LO QUE SE A PEDIDO
         # #----------------------------------------------------------------------
-        while (h > 0 and xk < xf) or (h < 0 and xk > xf):
+        while (h > 0 and tk_ < tf) or (h < 0 and tk_ > tf):
 
-            y_next = yk + h * f(xk, yk)
-            x_next = xk + h
-            
+            x_next = xk + h * f(tk_, xk)
+            t_next = tk_ + h
             
             #----------------------------------------------------------------------
             #                   HACENDOR
             #----------------------------------------------------------------------
             tabla.insert("", "end", values=[
                 k,
+                f"{tk_:.5f}",
                 f"{xk:.5f}",
-                f"{yk:.5f}",
-                f"{y_next:.5f}"
+                f"{x_next:.5f}"
             ])
 
             # GUARDAR PARA GRAFICAR
+            ts.append(t_next)
             xs.append(x_next)
-            ys.append(y_next)
             
             #----------------------------------------------------------------------
             #                           ACTUALIZADOR
             #----------------------------------------------------------------------
             
+            tk_ = t_next
             xk = x_next
-            yk = y_next
             k += 1
 
         # #----------------------------------------------------------------------
         #       GRAFICAR RESULTADOS
         # #----------------------------------------------------------------------
         ax = fig.add_subplot(111)
-        ax.plot(xs, ys, marker='o', linestyle='-')
+        ax.plot(ts, xs, marker='o', linestyle='-')
         ax.set_title("Solución con Método de Euler")
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
+        ax.set_xlabel("t")
+        ax.set_ylabel("x")
         ax.grid(True)
         canvas.draw()
 
@@ -89,7 +88,7 @@ def euler_method():
 #              INTERFAZ GRÁFICA 
 # #----------------------------------------------------------------------
 ventana = tk.Tk()
-ventana.title("Método de Euler — Intervalo [x0, xf]")
+ventana.title("Método de Euler — Equipo 4")
 ventana.attributes('-fullscreen', True)
 ventana.configure(bg="#F2F2F2")
 
@@ -99,15 +98,15 @@ tk.Label(ventana, text="Método de Euler — Equipo 4",
 frame_entrada = tk.Frame(ventana, bg="#F2F2F2")
 frame_entrada.pack(pady=10)
 
-tk.Label(frame_entrada, text="f(x, y) =", bg="#F2F2F2").grid(row=0, column=0)
+tk.Label(frame_entrada, text="f(t, x) =", bg="#F2F2F2").grid(row=0, column=0)
 entry_funcion = ttk.Entry(frame_entrada, width=25)
 entry_funcion.grid(row=0, column=1, padx=5)
 
-tk.Label(frame_entrada, text="x0:", bg="#F2F2F2").grid(row=0, column=2)
+tk.Label(frame_entrada, text="t0:", bg="#F2F2F2").grid(row=0, column=2)
 entry_x0 = ttk.Entry(frame_entrada, width=10)
 entry_x0.grid(row=0, column=3, padx=5)
 
-tk.Label(frame_entrada, text="y0:", bg="#F2F2F2").grid(row=0, column=4)
+tk.Label(frame_entrada, text="x0:", bg="#F2F2F2").grid(row=0, column=4)
 entry_y0 = ttk.Entry(frame_entrada, width=10)
 entry_y0.grid(row=0, column=5, padx=5)
 
@@ -124,7 +123,7 @@ frame_tabla = tk.LabelFrame(frame_inferior, text="Resultados",
                             font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_tabla.pack(side="left", fill="y", padx=10)
 
-cols = ["Iter", "x_k", "y_k", "y_(k+1)"]
+cols = ["Iter", "t_k", "x_k", "x_(k+1)"]
 tabla = ttk.Treeview(frame_tabla, columns=cols, show="headings", height=25)
 for col in cols:
     tabla.heading(col, text=col)
