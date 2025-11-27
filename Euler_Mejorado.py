@@ -5,77 +5,91 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+def euler_method():
 
-def euler_mejorado():
+    # LIMPIA TABLA Y GRÁFICA
     tabla.delete(*tabla.get_children())
-    fig.clear()#lIMPIA AMBOS DOS 
-    
-    #----------------------------------------------------------------------
-    #                       DEFINICION DE SIMBOLOS
-    #----------------------------------------------------------------------
+    fig.clear()
+
+    # DEFINIENDO LOS SÍMBOLOS
     x = sp.Symbol('x')
     y = sp.Symbol('y')
-    
-    
-    #----------------------------------------------------------------------
-    #              VALORES INGRESADOS POR USUARIO O NOSTROS
-    #----------------------------------------------------------------------
+
     try:
+        # ENTRADAS DEL USUARIO
         f_str = entry_funcion.get()
         f_xy = sp.sympify(f_str)
 
         x0 = float(entry_x0.get())
         y0 = float(entry_y0.get())
         h = float(entry_h.get())
-        iterations = int(entry_iter.get())
+        xf = y0   # LO QUE PIDIO EL PROFE
 
+        if h == 0:
+            raise ValueError("El paso 'h' no puede ser cero.")
+
+        # TRADUCTOR DE PYTHON EN POCAS PALABRAS
         f = sp.lambdify((x, y), f_xy, "numpy")
 
-        xs = [x0]# LISTAS PARA GRAFICAR
+        # LISTAS PARA GRAFICAR
+        xs = [x0]
         ys = [y0]
 
         xk = x0
         yk = y0
+        k = 0
 
-        #----------------------------------------------------------------------
-        #                   EULER MEJORADO
-        #----------------------------------------------------------------------
-        for k in range(iterations):
-            # Predictor (Euler simple)
-            y_pred = yk + h * f(xk, yk)
+        # ----------------------------------------------------
+        #          MÉTODO DE EULER
+        # ----------------------------------------------------
+        while (h > 0 and xk < xf) or (h < 0 and xk > xf):
+
+            y_next = yk + h * f(xk, yk)
             x_next = xk + h
 
-           
-            k1 = f(xk, yk)       
-            k2 = f(x_next, y_pred) 
-            y_next = yk + (h/2) * (k1 + k2) 
-
-            #----------------------------------------------------------------------
-            #                       LLENADOR DE LA TABLA
-            #----------------------------------------------------------------------
-            
+            # HACENDOR DE TABLA
             tabla.insert("", "end", values=[
                 k,
-                f"{xk:.5f}", 
+                f"{xk:.5f}",
                 f"{yk:.5f}",
-                f"{y_pred:.5f}",
                 f"{y_next:.5f}"
             ])
-    #----------------------------------------------------------------------
-    #                   ACTUALIZACION DE LISTAS PARA GRAFICAR
-    #----------------------------------------------------------------------
+
             xs.append(x_next)
             ys.append(y_next)
 
             xk = x_next
             yk = y_next
-        #----------------------------------------------------------------------
-        #                   GRAFICA DE LA SOLUCION
-        #----------------------------------------------------------------------
-        
+            k += 1
+
+        # ----------------------------------------------------
+        #           ANALÍTICA
+        # ----------------------------------------------------
+        try:
+            # DECLARAMOS y COMO FUNCION DE x
+            y_func = sp.Function('y')
+
+            # FORMAMOS LA EDO
+            eq = sp.Eq(sp.diff(y_func(x), x), f_xy)
+
+            #  RESOLVEMOS 
+            sol_analitica = sp.dsolve(eq)
+
+            # IMPRIMIDOR XD
+            sol_texto = f"Solución: {sol_analitica}"
+
+        except Exception:
+            sol_texto = "Solución: No se pudo obtener solución analítica"
+
+        # ----------------------------------------------------
+        #       GRAFICAR RESULTADOS
+        # ----------------------------------------------------
         ax = fig.add_subplot(111)
-        ax.plot(xs, ys, marker='o')
-        ax.set_title("Solución con Método de Euler Mejorado")
+        ax.plot(xs, ys, marker='o', linestyle='-', label="Euler")
+
+        ax.set_title("Solución con Método de Euler\n" + sol_texto,
+                     fontsize=12)
+
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.grid(True)
@@ -83,20 +97,20 @@ def euler_mejorado():
         canvas.draw()
 
     except Exception as e:
-        print("Error:", e)
+        tabla.insert("", "end", values=["Error", "", "", str(e)])
 
-#----------------------------------------------------------------------
-#                       VENATANA PRINCIPAL
-#----------------------------------------------------------------------
+
+# #----------------------------------------------------------------------
+#              INTERFAZ GRÁFICA 
+# #----------------------------------------------------------------------
 ventana = tk.Tk()
-ventana.title("Método de Euler Mejorado")
+ventana.title("Método de Euler — Intervalo [x0, xf]")
 ventana.attributes('-fullscreen', True)
 ventana.configure(bg="#F2F2F2")
 
-tk.Label(ventana, text="Método de Euler Mejorado — Equipo 4",
+tk.Label(ventana, text="Método de Euler — Equipo 4",
          font=("Segoe UI", 16, "bold"), bg="#F2F2F2").pack(pady=10)
 
-# Frame de entrada
 frame_entrada = tk.Frame(ventana, bg="#F2F2F2")
 frame_entrada.pack(pady=10)
 
@@ -116,22 +130,16 @@ tk.Label(frame_entrada, text="h:", bg="#F2F2F2").grid(row=0, column=6)
 entry_h = ttk.Entry(frame_entrada, width=10)
 entry_h.grid(row=0, column=7, padx=5)
 
-tk.Label(frame_entrada, text="Iteraciones:", bg="#F2F2F2").grid(row=0, column=8)
-entry_iter = ttk.Entry(frame_entrada, width=10)
-entry_iter.grid(row=0, column=9, padx=5)
+ttk.Button(frame_entrada, text="Calcular", command=euler_method).grid(row=0, column=8, padx=10)
 
-ttk.Button(frame_entrada, text="Calcular", command=euler_mejorado).grid(row=0, column=10, padx=10)
-
-# Frame inferior con tabla y gráfica
 frame_inferior = tk.Frame(ventana, bg="#F2F2F2")
 frame_inferior.pack(expand=True, fill="both", padx=10, pady=10)
 
-# Tabla de resultados
 frame_tabla = tk.LabelFrame(frame_inferior, text="Resultados",
                             font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_tabla.pack(side="left", fill="y", padx=10)
 
-cols = ["Iter", "x_k", "y_k", "y_pred", "y_(k+1)"]
+cols = ["Iter", "x_k", "y_k", "y_(k+1)"]
 tabla = ttk.Treeview(frame_tabla, columns=cols, show="headings", height=25)
 for col in cols:
     tabla.heading(col, text=col)
@@ -142,7 +150,6 @@ style = ttk.Style()
 style.configure("Treeview", font=("Segoe UI", 9))
 style.configure("Treeview.Heading", font=("Segoe UI", 10, "bold"))
 
-# Gráfica
 frame_grafica = tk.LabelFrame(frame_inferior, text="Gráfica",
                               font=("Segoe UI", 14, "bold"), bg="#F2F2F2")
 frame_grafica.pack(side="right", fill="both", expand=True, padx=10)
