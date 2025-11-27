@@ -16,7 +16,6 @@ def euler_method():
     x = sp.Symbol('x')
 
     try:
-        # ENTRADAS DEL USUARIO
         f_str = entry_funcion.get()
         f_tx = sp.sympify(f_str)
 
@@ -40,14 +39,20 @@ def euler_method():
         k = 0
 
         # ----------------------------------------------------
-        #          MÉTODO DE EULER
+        #          MÉTODO DE EULER MEJORADO
         # ----------------------------------------------------
         while (h > 0 and tk_ < tf) or (h < 0 and tk_ > tf):
 
-            x_next = xk + h * f(tk_, xk)
+            # Euler mejorado (Heun)
+            k1 = f(tk_, xk)
+            k2 = f(tk_ + h, xk + h * k1)
+            x_next = xk + (h/2) * (k1 + k2)
+
             t_next = tk_ + h
 
-            # HACENDOR DE TABLA
+            #----------------------------------------------------
+            #       HACENDOR DE TABLA
+            #----------------------------------------------------
             tabla.insert("", "end", values=[
                 k,
                 f"{tk_:.5f}",
@@ -66,9 +71,9 @@ def euler_method():
         #       GRAFICAR RESULTADOS
         # ----------------------------------------------------
         ax = fig.add_subplot(111)
-        ax.plot(ts, xs, marker='o', linestyle='-', label="Euler")
+        ax.plot(ts, xs, marker='o', linestyle='-', label="Euler Mejorado")
 
-        ax.set_title("Solución con Método de Euler\n" ,
+        ax.set_title("Solución con Método de Euler Mejorado (Heun)\n" ,
                      fontsize=12)
 
         ax.set_xlabel("t")
