@@ -90,11 +90,11 @@ def euler_method():
 #              INTERFAZ GRÁFICA 
 # #----------------------------------------------------------------------
 ventana = tk.Tk()
-ventana.title("Método de Euler — Intervalo [t0, tf]")
+ventana.title("Método de Euler Mejorado ")
 ventana.attributes('-fullscreen', True)
 ventana.configure(bg="#F2F2F2")
 
-tk.Label(ventana, text="Método de Euler — Equipo 4",
+tk.Label(ventana, text="Método de Euler Mejorado — Equipo 4",
          font=("Segoe UI", 16, "bold"), bg="#F2F2F2").pack(pady=10)
 
 frame_entrada = tk.Frame(ventana, bg="#F2F2F2")

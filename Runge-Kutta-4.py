@@ -84,7 +84,7 @@ def runge_kutta_4():
         ax = fig.add_subplot(111)
         ax.plot(ts, xs, marker="o", linestyle="-", label="RK4")
 
-        ax.set_title("Runge–Kutta 4° Orden", fontsize=12)
+        ax.set_title("Solucion de Runge–Kutta 4", fontsize=12)
         ax.set_xlabel("t")
         ax.set_ylabel("x")
         ax.grid(True)
@@ -99,11 +99,11 @@ def runge_kutta_4():
 #              INTERFAZ GRÁFICA 
 # ----------------------------------------------------
 ventana = tk.Tk()
-ventana.title("Runge-Kutta de Orden 4 — Equipo 4")
+ventana.title("Runge-Kutta 4 — Equipo 4")
 ventana.attributes('-fullscreen', True)
 ventana.configure(bg="#F2F2F2")
 
-tk.Label(ventana, text="Método Runge-Kutta 4° — Equipo 4",
+tk.Label(ventana, text="Método Runge-Kutta — Equipo 4",
          font=("Segoe UI", 16, "bold"), bg="#F2F2F2").pack(pady=10)
 
 # ENTRADAS
