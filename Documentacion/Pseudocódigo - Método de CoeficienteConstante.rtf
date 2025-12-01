@@ -1,0 +1,131 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 INICIO DEL PROGRAMA\
+\
+---------------------------------------------------------\
+FUNCI\'d3N normalizar(expr)\
+    Reemplazar "^" por "**"\
+    Reemplazar "sen" por "sin"\
+    Retornar expresi\'f3n modificada\
+FIN FUNCI\'d3N\
+---------------------------------------------------------\
+\
+---------------------------------------------------------\
+FUNCI\'d3N newton_find_root(f, df, x0, tol, max_iter)\
+    Para i desde 1 hasta max_iter:\
+        fx \uc0\u8592  f(x0)\
+        dfx \uc0\u8592  df(x0)\
+\
+        Si dfx = 0:\
+            Retornar None\
+\
+        x1 \uc0\u8592  x0 - fx / dfx\
+\
+        Si ABS(x1 - x0) < tol:\
+            Retornar x1\
+\
+        x0 \uc0\u8592  x1\
+\
+    Retornar None\
+FIN FUNCI\'d3N\
+---------------------------------------------------------\
+\
+---------------------------------------------------------\
+FUNCI\'d3N resolver()\
+    Limpiar tabla\
+    Limpiar gr\'e1fica\
+\
+    Intentar:\
+        ----- Lectura de entrada -----\
+        ecuacion \uc0\u8592  valor de entry_poly\
+        X0_usuario \uc0\u8592  valor num\'e9rico de entry_x0\
+        Y0_usuario \uc0\u8592  valor num\'e9rico de entry_y0\
+\
+        ecuacion \uc0\u8592  normalizar(ecuacion)\
+\
+        ----- Construcci\'f3n simb\'f3lica -----\
+        Definir variable simb\'f3lica x\
+        f_expr \uc0\u8592  convertir ecuaci\'f3n a expresi\'f3n simb\'f3lica\
+        df_expr \uc0\u8592  derivada simb\'f3lica de f_expr\
+\
+        f \uc0\u8592  funci\'f3n num\'e9rica basada en f_expr\
+        df \uc0\u8592  funci\'f3n num\'e9rica basada en df_expr\
+\
+        ----- B\'fasqueda de ra\'edces con Newton -----\
+        lista_raices \uc0\u8592  lista vac\'eda\
+\
+        Para cada x0 en valores entre -10 y 10:\
+            r \uc0\u8592  newton_find_root(f, df, x0)\
+\
+            Si r NO es None:\
+                r \uc0\u8592  redondear a 6 decimales\
+\
+                Si r NO est\'e1 en lista_raices:\
+                    agregar r a lista_raices\
+\
+        ----- Llenado de tabla -----\
+        Para cada ra\'edz con \'edndice i:\
+            insertar (i, ra\'edz) en tabla\
+\
+        ----- Crear soluci\'f3n general -----\
+        sol \uc0\u8592  ""\
+        Para cada ra\'edz r con \'edndice k:\
+            agregar "K(k+1) * e^(r * x)" a sol\
+\
+        Mostrar sol en label_sol\
+        Mostrar X0_usuario y Y0_usuario en label_xy\
+\
+        ----- Graficar -----\
+        X \uc0\u8592  rango de -10 a 10\
+        Y \uc0\u8592  f(X)\
+\
+        Crear gr\'e1fica\
+        Dibujar curva de Y respecto a X\
+\
+        Para cada ra\'edz r:\
+            Dibujar punto rojo en (r, f(r))\
+            Escribir valor r junto al punto\
+\
+        Dibujar punto azul en (X0_usuario, f(X0_usuario))\
+\
+        Dibujar eje horizontal\
+        Activar cuadr\'edcula\
+        Dibujar leyenda\
+        Actualizar gr\'e1fico\
+\
+    Capturar error e imprimirlo\
+FIN FUNCI\'d3N\
+---------------------------------------------------------\
+\
+---------------------------------------------------------\
+INTERFAZ GR\'c1FICA\
+\
+Crear ventana y ponerla en modo pantalla completa\
+\
+Crear marco de entrada\
+Agregar campo para ecuaci\'f3n\
+Agregar campo para X0\
+Agregar campo para Y0\
+Agregar bot\'f3n "Resolver" que ejecuta resolver()\
+\
+Agregar etiquetas para:\
+    - Soluci\'f3n general\
+    - X0 y Y0\
+\
+Crear marco para tabla\
+Crear tabla con columnas:\
+    "#" y "Ra\'edz"\
+\
+Crear marco para gr\'e1fica\
+Agregar figura de matplotlib y su canvas\
+\
+Ejecutar ventana con mainloop()\
+\
+FIN DEL PROGRAMA\
+---------------------------------------------------------\
+}

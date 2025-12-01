@@ -1,0 +1,87 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 INICIO DEL PROGRAMA\
+\
+-------------------------------------------------------------\
+FUNCI\'d3N calcular()\
+-------------------------------------------------------------\
+\
+    Intentar:\
+\
+        ----------- LECTURA DE ENTRADAS -----------\
+        funcion_str \uc0\u8592  texto de entrada_funcion\
+        a \uc0\u8592  valor num\'e9rico de entrada_a\
+        b \uc0\u8592  valor num\'e9rico de entrada_b\
+        n \uc0\u8592  entero de entrada_n\
+\
+        ----------- PROCESAMIENTO DE FUNCI\'d3N -----------\
+        Definir s\'edmbolo x\
+        f_sym \uc0\u8592  convertir funcion_str en expresi\'f3n simb\'f3lica\
+        f \uc0\u8592  convertir f_sym en funci\'f3n evaluable (lambdify)\
+\
+        ----------- REGLA DEL TRAPECIO -----------\
+        h \uc0\u8592  (b \u8722  a) / n                     (tama\'f1o de cada subintervalo)\
+        x_vals \uc0\u8592  n+1 puntos equiespaciados entre a y b\
+        y_vals \uc0\u8592  f(x_vals)\
+\
+        area \uc0\u8592  (h/2) * ( y_vals[0] \
+                        + 2*sumatoria(y_vals[1 : n-1]) \
+                        + y_vals[n] )\
+\
+        resultado \uc0\u8592  "Aproximaci\'f3n de la integral = area"\
+\
+        ----------- PREPARAR GR\'c1FICA -----------\
+        x_plot \uc0\u8592  1000 puntos en [a, b]\
+        y_plot \uc0\u8592  f(x_plot)\
+\
+        Crear nueva figura\
+        Graficar y_plot contra x_plot en color azul\
+        Rellenar \'e1rea bajo la curva en azul claro\
+\
+        ----------- DIBUJAR TRAPECIOS -----------\
+        Para i desde 0 hasta n\uc0\u8722 1:\
+            xs \uc0\u8592  [ x_vals[i], x_vals[i], x_vals[i+1], x_vals[i+1] ]\
+            ys \uc0\u8592  [ 0, y_vals[i], y_vals[i+1], 0 ]\
+            Rellenar trapecio con color azul claro y borde rojo\
+\
+        Dibujar puntos rojos en (x_vals, y_vals)\
+        Agregar t\'edtulo, etiquetas, cuadr\'edcula y leyenda\
+\
+        Mostrar gr\'e1fica\
+\
+    Capturar excepci\'f3n e:\
+        Mostrar error por messagebox\
+\
+FIN FUNCI\'d3N\
+-------------------------------------------------------------\
+\
+\
+-------------------------------------------------------------\
+INTERFAZ GR\'c1FICA (Tkinter)\
+-------------------------------------------------------------\
+\
+Crear ventana principal\
+T\'edtulo = "Calculadora de Integrales - Regla del Trapecio"\
+Tama\'f1o fijo 400x350\
+\
+Agregar campos de entrada:\
+    - Funci\'f3n f(x)\
+    - L\'edmite inferior (a)\
+    - L\'edmite superior (b)\
+    - N\'famero de particiones n\
+\
+Agregar bot\'f3n "Calcular Integral" que llama a calcular()\
+\
+Crear StringVar resultado\
+Mostrar resultado en una etiqueta en color verde\
+\
+Ejecutar mainloop()\
+\
+FIN DEL PROGRAMA\
+-------------------------------------------------------------\
+}

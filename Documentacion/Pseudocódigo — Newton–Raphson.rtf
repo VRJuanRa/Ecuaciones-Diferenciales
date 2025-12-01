@@ -1,0 +1,144 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 INICIO DEL PROGRAMA\
+\
+-------------------------------------------------------------\
+FUNCI\'d3N newton_raphson()\
+-------------------------------------------------------------\
+\
+    Intentar:\
+\
+        ---------------- DATOS DE ENTRADA ----------------\
+        f_str \uc0\u8592  texto de entry_funcion\
+        df_str \uc0\u8592  texto de entry_derivada\
+        x0 \uc0\u8592  valor num\'e9rico de entry_x0\
+        n_iter \uc0\u8592  n\'famero entero de entry_iter\
+\
+        Definir s\'edmbolo x\
+\
+        Convertir f_str a expresi\'f3n simb\'f3lica f\
+        Convertir df_str a expresi\'f3n simb\'f3lica df\
+\
+        ---------- VERIFICAR DERIVADA CORRECTA ----------\
+        derivada_real \uc0\u8592  derivada simb\'f3lica de f\
+\
+        Si derivada_real distinta de df (simplificada):\
+            Mostrar error "Derivada incorrecta"\
+            Terminar funci\'f3n\
+\
+        ---------- CREAR FUNCIONES NUM\'c9RICAS ----------\
+        f_num \uc0\u8592  versi\'f3n evaluable de f\
+        df_num \uc0\u8592  versi\'f3n evaluable de df\
+\
+        Crear lista vac\'eda datos\
+        Crear lista x_values con valor inicial x0\
+\
+        -------------------------------------------------\
+        PROCESO PRINCIPAL DE NEWTON\'96RAPHSON\
+        -------------------------------------------------\
+        Para i desde 0 hasta n_iter\uc0\u8722 1:\
+\
+            fx \uc0\u8592  f_num(x0)\
+            dfx \uc0\u8592  df_num(x0)\
+\
+            Si dfx = 0:\
+                Mostrar error "La derivada es cero"\
+                Detener ciclo\
+\
+            x1 \uc0\u8592  x0 \u8722  fx / dfx         (F\'f3rmula de Newton-Raphson)\
+            error \uc0\u8592  |x1 \u8722  x0|\
+\
+            Agregar a datos:\
+                [iteraci\'f3n i+1, x0, fx, dfx, x1, error]\
+\
+            Agregar x1 a x_values\
+\
+            Si error < 1e\uc0\u8722 7:\
+                Detener ciclo  (la ra\'edz fue encontrada)\
+\
+            x0 \uc0\u8592  x1   (preparar para siguiente iteraci\'f3n)\
+\
+        -------------------------------------------------\
+        TABLA DE RESULTADOS\
+        -------------------------------------------------\
+        Vaciar tabla\
+        Insertar cada fila de datos en tabla\
+\
+        -------------------------------------------------\
+        GRAFICAR FUNCI\'d3N, TANGENTES Y APROXIMACIONES\
+        -------------------------------------------------\
+        x_min \uc0\u8592  m\'ednimo valor de x_values \u8722  2\
+        x_max \uc0\u8592  m\'e1ximo valor de x_values + 2\
+        x_vals \uc0\u8592  valores entre x_min y x_max\
+        y_vals \uc0\u8592  f_num(x_vals)\
+\
+        Limpiar figura\
+\
+        Crear subplot ax\
+        Dibujar eje X y eje Y punteados\
+        Graficar curva f(x)\
+\
+        Para cada fila en datos:\
+            xi \uc0\u8592  valor x_k\
+            yi \uc0\u8592  f_num(xi)\
+            pendiente \uc0\u8592  df_num(xi)\
+\
+            Crear rango tx alrededor de xi\
+            Calcular recta tangente:  ty = pendiente*(tx\uc0\u8722 xi) + yi\
+\
+            Dibujar l\'ednea tangente\
+            Dibujar punto rojo en (xi, yi)\
+            Escribir texto "x_i" junto al punto\
+\
+        raiz \uc0\u8592  \'faltimo valor x_(k+1) guardado\
+        raiz_y \uc0\u8592  f_num(raiz)\
+\
+        Dibujar punto verde grande en la ra\'edz\
+\
+        Colocar t\'edtulo, ejes, leyenda y cuadr\'edcula\
+        Actualizar canvas\
+\
+    Capturar cualquier error:\
+        Mostrar mensaje de error\
+\
+FIN FUNCI\'d3N\
+-------------------------------------------------------------\
+\
+\
+-------------------------------------------------------------\
+INTERFAZ GR\'c1FICA (Tkinter)\
+-------------------------------------------------------------\
+\
+Crear ventana principal\
+Activar pantalla completa\
+Establecer fondo gris claro\
+\
+Agregar etiqueta con t\'edtulo "Newton-Raphson Equipo 4"\
+\
+Crear frame de entrada con:\
+    - Campo f(x)\
+    - Campo f'(x)\
+    - Campo x0\
+    - Campo iteraciones\
+    - Bot\'f3n "Calcular" \uc0\u8594  newton_raphson()\
+\
+Crear frame inferior con dos secciones:\
+    1. Tabla de resultados (izquierda)\
+    2. Gr\'e1fica (derecha)\
+\
+Configurar tabla:\
+    Columnas = Iteraci\'f3n, x_k, f(x_k), f'(x_k), x_(k+1), Error\
+\
+Crear figura matplotlib y canvas\
+Insertar canvas en frame de gr\'e1fica\
+\
+Ejecutar ventana con mainloop()\
+\
+FIN DEL PROGRAMA\
+-------------------------------------------------------------\
+}
